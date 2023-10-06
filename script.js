@@ -7,7 +7,6 @@ const brandProduct = document.querySelector('#brandProduct')
 const imgProduct = document.querySelector('#imgProduct')
 const priceProduct = document.querySelector('#priceProduct')
 const rigaCard = document.querySelector('#rigaCard')
-const login=false
 
 async function loadProduct() {
     const risp = await fetch(api, {
@@ -20,19 +19,35 @@ async function loadProduct() {
 }
 
 window.onload = async function () {
-    const AllProducts = await loadProduct()
-    console.log(AllProducts)
-    AllProducts.forEach(element => {
-        rigaCard.innerHTML += /*html*/ `
-        <div class="col-4">
-            <h3 id="nameProduct">${element.name}</h3>
-            <p id="descrProduct">${element.description}</p>
-            <p id="brandProduct">${element.brand}</p>
-            <img id="imgProduct" src="${element.imageUrl}" width="150" height="150">
-            <p id="priceProduct">${element.price}</p>
+    rigaCard.innerHTML += /*html*/ `
+    <span class="loader"></span>
+    `
+    try {
+        const AllProducts = await loadProduct()
+        console.log(AllProducts)
+        document.querySelector('.loader').remove()
+        AllProducts.forEach(element => {
+            rigaCard.innerHTML += /*html*/ `
+        <div class="col-6 col-md-4 col-lg-3 d-flex flex-column align-items-center mb-2">
+            <div class="card w95">
+                <img src="${element.imageUrl}" class="card-img-top" height="180" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">${element.name}</h5>
+                    <p class="card-text">${element.brand}</p>
+                    <p class="card-text text-truncate">${element.description}</p>
+                    <p id="priceProduct">${element.price}€</p>
+                    <a href="#" class="btn btn-primary">Add To Cart</a>
+                </div>
+            </div>
         </div>
     `
-    })
+        })
+
+    }
+    catch (error){
+        alert('Errore nel caricamento')
+        document.querySelector('.loader').remove()
+    }
 }
 
 
@@ -49,7 +64,7 @@ async function insertProduct(dataInsert) {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTY0MTU2NjksImV4cCI6MTY5NzYyNTI2OX0.wcciYsvcV8Y8cHbI5OP8nm04BU44GDgf3uWkiU2RpTU"
         },
         body: JSON.stringify(dataInsert)
     })
