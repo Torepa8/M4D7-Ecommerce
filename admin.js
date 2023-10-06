@@ -1,12 +1,14 @@
 const passAdmin = document.querySelector('#passwordAdmin')
 const inputContainer = document.querySelector('#inputContainer')
-const rowCont=document.querySelector('#rowContainer')
+const rowCont = document.querySelector('#rowContainer')
 const navEdit = document.querySelector('#navEdit')
 const nameP = document.querySelector('#nameP')
 const descrP = document.querySelector('#descriptionP')
 const imgP = document.querySelector('#imageP')
 const brandP = document.querySelector('#brandP')
 const priceP = document.querySelector('#priceP')
+const formAdmin = document.querySelector('#formAdmin')
+
 const API = "https://striveschool-api.herokuapp.com/api/product"
 
 let password = "sonoio"
@@ -15,18 +17,28 @@ let login = false
 //Al caricamento della pagina vado a vedere se l'utente aveva già effettuato il login
 window.onload = function () {
     if (localStorage.getItem("login") === 'true') {
-        inputContainer.classList.remove("d-none")
-        navEdit.classList.remove('pe-none')
+        // inputContainer.classList.remove("d-none")
+        // navEdit.classList.remove('pe-none')
+        // formAdmin.classList.add('d-none')
+        loginOk()
     }
 }
 
+function loginOk() {
+    inputContainer.classList.remove("d-none")
+    navEdit.classList.remove('pe-none')
+    formAdmin.classList.add('d-none')
+}
+
+//Questa funzione controlla la password admin per poter aggiungere, modificare o eliminare i prodotti
 function controlloPassword(ev) {
     ev.preventDefault()
 
     if (passAdmin.value === password) {
-        inputContainer.classList.remove("d-none")
-        navEdit.classList.remove('pe-none')
-
+        // inputContainer.classList.remove("d-none")
+        // navEdit.classList.remove('pe-none')
+        // formAdmin.classList.add('d-none')
+        loginOk()
         alert('Admin verificato!')
         login = true
         localStorage.setItem("login", "true")
@@ -53,8 +65,8 @@ function insertProduct() {
 
     if ((nameP.value !== "") && (descrP.value !== "") && (imgP.value !== "") && (brandP.value !== "") && (priceP.value !== "")) {
         const prodotto = { name: nameP.value, description: descrP.value, imageUrl: imgP.value, brand: brandP.value, price: priceP.value }
-        if(confirm("Confermi l'inserimento del prodotto?"))
-        uploadProduct(prodotto)
+        if (confirm("Confermi l'inserimento del prodotto?"))
+            uploadProduct(prodotto)
     } else {
         alert('Compila tutti i campi')
     }
@@ -82,9 +94,10 @@ async function editProduct() {
     console.log(AllProducts)
     document.querySelector('.loader').remove()
     AllProducts.forEach(element => {
-        const {name,description,brand,imageUrl,price}=element
+        const { _id, name, description, brand, imageUrl, price } = element
         rowCont.innerHTML += /*html*/ `
             <div class="col-6 col-md-4 col-lg-3 d-flex flex-column align-items-center mb-2">
+            <a href="product.html?asin=${_id}">
                 <div class="card w95">
                     <img src="${imageUrl}" class="card-img-top" height="180" alt="...">
                     <div class="card-body">
@@ -92,9 +105,15 @@ async function editProduct() {
                         <p class="card-text">${brand}</p>
                         <p class="card-text text-truncate">${description}</p>
                         <p id="priceProduct">${price}€</p>
-                        <a href="#" class="btn btn-primary">Add To Cart</a>
+                        <a href="" class="btn btn-secondary">
+                        <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="" class="btn btn-danger">
+                        <i class="bi bi-trash3-fill"></i>
+                        </a>
                     </div>
                 </div>
+            </a>
             </div>
         `
     })

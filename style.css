@@ -2,6 +2,16 @@
     cursor: pointer;
 }
 
+a{
+    text-decoration: none;
+    color: black;
+    opacity: 0.7;
+}
+
+a:hover{
+    opacity: 1;
+}
+
 .loader {
     width: 48px;
     height: 48px;
