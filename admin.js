@@ -9,7 +9,7 @@ const brandP = document.querySelector('#brandP')
 const priceP = document.querySelector('#priceP')
 const formAdmin = document.querySelector('#formAdmin')
 
-const API = "https://striveschool-api.herokuapp.com/api/product"
+const API = "https://striveschool-api.herokuapp.com/api/product/"
 
 let password = "sonoio"
 let login = false
@@ -18,10 +18,11 @@ let login = false
 window.onload = function () {
     if (localStorage.getItem("login") === 'true') {
         // inputContainer.classList.remove("d-none")
-        // navEdit.classList.remove('pe-none')
+        // navEdit.classList.remove('pe-none')    INSERITE NELLA FUNCTION loginOk()
         // formAdmin.classList.add('d-none')
-        loginOk()
+        loginOk()  
     }
+    displayEditProduct()
 }
 
 function loginOk() {
@@ -36,7 +37,7 @@ function controlloPassword(ev) {
 
     if (passAdmin.value === password) {
         // inputContainer.classList.remove("d-none")
-        // navEdit.classList.remove('pe-none')
+        // navEdit.classList.remove('pe-none')   INSERITE NELLA FUNCTION loginOk()
         // formAdmin.classList.add('d-none')
         loginOk()
         alert('Admin verificato!')
@@ -47,7 +48,6 @@ function controlloPassword(ev) {
         alert('Password errata!')
     }
 }
-
 
 async function uploadProduct(inputData) {
     const addProduct = await fetch(API, {
@@ -61,8 +61,8 @@ async function uploadProduct(inputData) {
     return addProduct
 }
 
+//Controllo campi input e passaggio dei dati inseriti per eseguire la fecth di inserimento dati
 function insertProduct() {
-
     if ((nameP.value !== "") && (descrP.value !== "") && (imgP.value !== "") && (brandP.value !== "") && (priceP.value !== "")) {
         const prodotto = { name: nameP.value, description: descrP.value, imageUrl: imgP.value, brand: brandP.value, price: priceP.value }
         if (confirm("Confermi l'inserimento del prodotto?"))
@@ -82,12 +82,58 @@ async function loadProduct() {
     return prodotti
 }
 
-// inputContainer.classList.add('d-none')
+//Eliminazione prodotto
+async function deleteProduct(e, idpro) {
+    e.preventDefault()
+    // alert(idpro)
 
-async function editProduct() {
+    if (confirm('Sei sicuro di eliminare il prodotto?')) {
+        fetch(API + idpro, {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+            }
+        })
+        displayEditProduct()
+    } else {
+        alert('Nessuna eliminazione')
+    }
+}
 
-    inputContainer.innerHTML = /*html*/ `
-        <span class="loader"></span>
+function editProduct(e, idpro) {
+    e.preventDefault()
+
+    alert('Stai modificando il prodotto con id' + idpro)
+    rowCont.innerHTML = ""
+    addProduct()
+    fetch(API + idpro, {
+        headers: {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+        }
+    }).then(r => r.json())
+        .then(selectedProduct)
+
+    function selectedProduct(p) {
+        console.log(p)
+        const { name, description, imageUrl, brand, price } = p
+        nameP.value = name
+        descrP.value = description
+        imgP.value = imageUrl
+        brandP.value = brand
+        priceP.value = price
+
+    }
+}
+
+function addProduct() {
+    // window.location.reload(true);
+}
+
+async function displayEditProduct() {
+    // rowCont.innerHTML = ""
+    rowCont.innerHTML = /*html*/ `
+        
+        <span class="loader m-4"></span>
         `
 
     const AllProducts = await loadProduct()
@@ -97,23 +143,21 @@ async function editProduct() {
         const { _id, name, description, brand, imageUrl, price } = element
         rowCont.innerHTML += /*html*/ `
             <div class="col-6 col-md-4 col-lg-3 d-flex flex-column align-items-center mb-2">
-            <a href="product.html?asin=${_id}">
-                <div class="card w95">
+                <div id="${_id}" class="card w95">
                     <img src="${imageUrl}" class="card-img-top" height="180" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">${name}</h5>
                         <p class="card-text">${brand}</p>
                         <p class="card-text text-truncate">${description}</p>
                         <p id="priceProduct">${price}€</p>
-                        <a href="" class="btn btn-secondary">
+                        <a href="" onclick="editProduct(event, '${_id}')" class="btn btn-secondary">
                         <i class="bi bi-pencil-square"></i>
                         </a>
-                        <a href="" class="btn btn-danger">
+                        <a href="" onclick="deleteProduct(event, '${_id}')" class="btn btn-danger">
                         <i class="bi bi-trash3-fill"></i>
                         </a>
                     </div>
                 </div>
-            </a>
             </div>
         `
     })

@@ -27,18 +27,22 @@ window.onload = async function () {
         console.log(AllProducts)
         document.querySelector('.loader').remove()
         AllProducts.forEach(element => {
+        const { _id, name, description, brand, imageUrl, price } = element
+
             rigaCard.innerHTML += /*html*/ `
         <div class="col-6 col-md-4 col-lg-3 d-flex flex-column align-items-center mb-2">
+        <a href="product.html?idP=${_id}">
             <div class="card w95">
-                <img src="${element.imageUrl}" class="card-img-top" height="180" alt="...">
+                <img src="${imageUrl}" class="card-img-top" height="180" alt="...">
                 <div class="card-body">
-                    <h5 class="card-title">${element.name}</h5>
-                    <p class="card-text">${element.brand}</p>
-                    <p class="card-text text-truncate">${element.description}</p>
-                    <p id="priceProduct">${element.price}€</p>
+                    <h5 class="card-title">${name}</h5>
+                    <p class="card-text">${brand}</p>
+                    <p class="card-text text-truncate">${description}</p>
+                    <p id="priceProduct">${price}€</p>
                     <a href="#" class="btn btn-primary">Add To Cart</a>
                 </div>
             </div>
+        </a>
         </div>
     `
         })
