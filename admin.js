@@ -142,7 +142,7 @@ async function displayEditProduct() {
     AllProducts.forEach(element => {
         const { _id, name, description, brand, imageUrl, price } = element
         rowCont.innerHTML += /*html*/ `
-            <div class="col-6 col-md-4 col-lg-3 d-flex flex-column align-items-center mb-2">
+            <div class="col-12 col-md-6 d-flex flex-column align-items-center mb-2">
                 <div id="${_id}" class="card w95">
                     <img src="${imageUrl}" class="card-img-top" height="180" alt="...">
                     <div class="card-body">
