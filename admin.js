@@ -8,6 +8,7 @@ const imgP = document.querySelector('#imageP')
 const brandP = document.querySelector('#brandP')
 const priceP = document.querySelector('#priceP')
 const formAdmin = document.querySelector('#formAdmin')
+let addORedit = "add"
 
 const API = "https://striveschool-api.herokuapp.com/api/product/"
 
@@ -20,7 +21,7 @@ window.onload = function () {
         // inputContainer.classList.remove("d-none")
         // navEdit.classList.remove('pe-none')    INSERITE NELLA FUNCTION loginOk()
         // formAdmin.classList.add('d-none')
-        loginOk()  
+        loginOk()
     }
     displayEditProduct()
 }
@@ -61,87 +62,112 @@ async function uploadProduct(inputData) {
     return addProduct
 }
 
+async function addEditProduct(inputData) {
+    const idname=nameP.name
+    const addProduct = await fetch(API+idname, {
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTY0MTU2NjksImV4cCI6MTY5NzYyNTI2OX0.wcciYsvcV8Y8cHbI5OP8nm04BU44GDgf3uWkiU2RpTU"
+        },
+        body: JSON.stringify(inputData)
+    }).finally(alert("Prodotto Modificato"))
+    window.location.reload(true);
+    return addProduct
+}
+
+
+
 //Controllo campi input e passaggio dei dati inseriti per eseguire la fecth di inserimento dati
 function insertProduct() {
     if ((nameP.value !== "") && (descrP.value !== "") && (imgP.value !== "") && (brandP.value !== "") && (priceP.value !== "")) {
         const prodotto = { name: nameP.value, description: descrP.value, imageUrl: imgP.value, brand: brandP.value, price: priceP.value }
-        if (confirm("Confermi l'inserimento del prodotto?"))
-            uploadProduct(prodotto)
-    } else {
+        if (addORedit === "add") {
+            if (confirm("Confermi l'inserimento del prodotto?"))
+                uploadProduct(prodotto)
+        }
+        else{
+            if (confirm("Confermi la modifica del prodotto?"))
+                addEditProduct(prodotto)
+        }
+    }
+    else {
         alert('Compila tutti i campi')
     }
 }
 
-async function loadProduct() {
-    const risp = await fetch(API, {
-        headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
-        }
-    })
-    const prodotti = await risp.json()
-    return prodotti
-}
-
-//Eliminazione prodotto
-async function deleteProduct(e, idpro) {
-    e.preventDefault()
-    // alert(idpro)
-
-    if (confirm('Sei sicuro di eliminare il prodotto?')) {
-        fetch(API + idpro, {
-            method: "DELETE",
+    async function loadProduct() {
+        const risp = await fetch(API, {
             headers: {
                 "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
             }
         })
-        displayEditProduct()
-    } else {
-        alert('Nessuna eliminazione')
+        const prodotti = await risp.json()
+        return prodotti
     }
-}
 
-function editProduct(e, idpro) {
-    e.preventDefault()
+    //Eliminazione prodotto
+    async function deleteProduct(e, idpro) {
+        e.preventDefault()
+        // alert(idpro)
 
-    alert('Stai modificando il prodotto con id' + idpro)
-    rowCont.innerHTML = ""
-    addProduct()
-    fetch(API + idpro, {
-        headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+        if (confirm('Sei sicuro di eliminare il prodotto?')) {
+            fetch(API + idpro, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+                }
+            })
+            displayEditProduct()
+        } else {
+            alert('Nessuna eliminazione')
         }
-    }).then(r => r.json())
-        .then(selectedProduct)
-
-    function selectedProduct(p) {
-        console.log(p)
-        const { name, description, imageUrl, brand, price } = p
-        nameP.value = name
-        descrP.value = description
-        imgP.value = imageUrl
-        brandP.value = brand
-        priceP.value = price
-
     }
-}
 
-function addProduct() {
-    // window.location.reload(true);
-}
+    function editProduct(e, idpro) {
+        e.preventDefault()
 
-async function displayEditProduct() {
-    // rowCont.innerHTML = ""
-    rowCont.innerHTML = /*html*/ `
+        alert('Stai modificando il prodotto con id ' + idpro)
+        addORedit="edit"
+        // rowCont.innerHTML = ""
+        // addProduct()
+        fetch(API + idpro, {
+            headers: {
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+            }
+        }).then(r => r.json())
+            .then(selectedProduct)
+
+        function selectedProduct(p) {
+            console.log(p)
+            const { _id, name, description, imageUrl, brand, price } = p
+            nameP.name=_id
+            nameP.value = name
+            descrP.value = description
+            imgP.value = imageUrl
+            brandP.value = brand
+            priceP.value = price
+            console.log(nameP.name)
+        }
+    }
+
+    function addProduct() {
+        // window.location.reload(true);
+    }
+
+    async function displayEditProduct() {
+        // rowCont.innerHTML = ""
+        rowCont.innerHTML = /*html*/ `
         
         <span class="loader m-4"></span>
         `
 
-    const AllProducts = await loadProduct()
-    console.log(AllProducts)
-    document.querySelector('.loader').remove()
-    AllProducts.forEach(element => {
-        const { _id, name, description, brand, imageUrl, price } = element
-        rowCont.innerHTML += /*html*/ `
+        const AllProducts = await loadProduct()
+        console.log(AllProducts)
+        document.querySelector('.loader').remove()
+        AllProducts.forEach(element => {
+            const { _id, name, description, brand, imageUrl, price } = element
+            rowCont.innerHTML += /*html*/ `
             <div class="col-12 col-md-6 d-flex flex-column align-items-center mb-2">
                 <div id="${_id}" class="card w95">
                     <img src="${imageUrl}" class="card-img-top" height="180" alt="...">
@@ -160,5 +186,5 @@ async function displayEditProduct() {
                 </div>
             </div>
         `
-    })
-}
+        })
+    }
