@@ -18,9 +18,6 @@ let login = false
 //Al caricamento della pagina vado a vedere se l'utente aveva già effettuato il login
 window.onload = function () {
     if (localStorage.getItem("login") === 'true') {
-        // inputContainer.classList.remove("d-none")
-        // navEdit.classList.remove('pe-none')    INSERITE NELLA FUNCTION loginOk()
-        // formAdmin.classList.add('d-none')
         loginOk()
     }
     displayEditProduct()
@@ -37,9 +34,6 @@ function controlloPassword(ev) {
     ev.preventDefault()
 
     if (passAdmin.value === password) {
-        // inputContainer.classList.remove("d-none")
-        // navEdit.classList.remove('pe-none')   INSERITE NELLA FUNCTION loginOk()
-        // formAdmin.classList.add('d-none')
         loginOk()
         alert('Admin verificato!')
         login = true
@@ -50,6 +44,7 @@ function controlloPassword(ev) {
     }
 }
 
+//fx per inserire i prodotti sul server
 async function uploadProduct(inputData) {
     const addProduct = await fetch(API, {
         method: 'POST',
@@ -62,9 +57,10 @@ async function uploadProduct(inputData) {
     return addProduct
 }
 
+//fx per modificare i prodotti
 async function addEditProduct(inputData) {
-    const idname=nameP.name
-    const addProduct = await fetch(API+idname, {
+    const idname = nameP.name
+    const addProduct = await fetch(API + idname, {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json",
@@ -86,7 +82,7 @@ function insertProduct() {
             if (confirm("Confermi l'inserimento del prodotto?"))
                 uploadProduct(prodotto)
         }
-        else{
+        else {
             if (confirm("Confermi la modifica del prodotto?"))
                 addEditProduct(prodotto)
         }
@@ -96,78 +92,79 @@ function insertProduct() {
     }
 }
 
-    async function loadProduct() {
-        const risp = await fetch(API, {
+//fx per caricare i prodotti dal server
+async function loadProduct() {
+    const risp = await fetch(API, {
+        headers: {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+        }
+    })
+    const prodotti = await risp.json()
+    return prodotti
+}
+
+//Eliminazione prodotto
+async function deleteProduct(e, idpro) {
+    e.preventDefault()
+    // alert(idpro)
+
+    if (confirm('Sei sicuro di eliminare il prodotto?')) {
+        fetch(API + idpro, {
+            method: "DELETE",
             headers: {
                 "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
             }
         })
-        const prodotti = await risp.json()
-        return prodotti
+        displayEditProduct()
+    } else {
+        alert('Nessuna eliminazione')
     }
+}
 
-    //Eliminazione prodotto
-    async function deleteProduct(e, idpro) {
-        e.preventDefault()
-        // alert(idpro)
+function editProduct(e, idpro) {
+    e.preventDefault()
 
-        if (confirm('Sei sicuro di eliminare il prodotto?')) {
-            fetch(API + idpro, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
-                }
-            })
-            displayEditProduct()
-        } else {
-            alert('Nessuna eliminazione')
+    alert('Stai modificando il prodotto con id ' + idpro)
+    addORedit = "edit"
+    // rowCont.innerHTML = ""
+    // addProduct()
+    fetch(API + idpro, {
+        headers: {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
         }
+    }).then(r => r.json())
+        .then(selectedProduct)
+
+    function selectedProduct(p) {
+        console.log(p)
+        const { _id, name, description, imageUrl, brand, price } = p
+        nameP.name = _id
+        nameP.value = name
+        descrP.value = description
+        imgP.value = imageUrl
+        brandP.value = brand
+        priceP.value = price
+        console.log(nameP.name)
     }
+}
 
-    function editProduct(e, idpro) {
-        e.preventDefault()
+function addProduct() {
+    // window.location.reload(true);
+}
 
-        alert('Stai modificando il prodotto con id ' + idpro)
-        addORedit="edit"
-        // rowCont.innerHTML = ""
-        // addProduct()
-        fetch(API + idpro, {
-            headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
-            }
-        }).then(r => r.json())
-            .then(selectedProduct)
-
-        function selectedProduct(p) {
-            console.log(p)
-            const { _id, name, description, imageUrl, brand, price } = p
-            nameP.name=_id
-            nameP.value = name
-            descrP.value = description
-            imgP.value = imageUrl
-            brandP.value = brand
-            priceP.value = price
-            console.log(nameP.name)
-        }
-    }
-
-    function addProduct() {
-        // window.location.reload(true);
-    }
-
-    async function displayEditProduct() {
-        // rowCont.innerHTML = ""
-        rowCont.innerHTML = /*html*/ `
+async function displayEditProduct() {
+    // rowCont.innerHTML = ""
+    rowCont.innerHTML = /*html*/ `
         
         <span class="loader m-4"></span>
         `
 
-        const AllProducts = await loadProduct()
-        console.log(AllProducts)
-        document.querySelector('.loader').remove()
-        AllProducts.forEach(element => {
-            const { _id, name, description, brand, imageUrl, price } = element
-            rowCont.innerHTML += /*html*/ `
+    const AllProducts = await loadProduct()
+    console.log(AllProducts)
+    document.querySelector('.loader').remove()
+    AllProducts.forEach(element => {
+        const { _id, name, description, brand, imageUrl, price } = element
+        rowCont.innerHTML += /*html*/ `
             <div class="col-12 col-md-6 d-flex flex-column align-items-center mb-2">
                 <div id="${_id}" class="card w95">
                     <img src="${imageUrl}" class="card-img-top" height="180" alt="...">
@@ -176,7 +173,7 @@ function insertProduct() {
                         <p class="card-text">${brand}</p>
                         <p class="card-text text-truncate">${description}</p>
                         <p id="priceProduct">${price}€</p>
-                        <a href="" onclick="editProduct(event, '${_id}')" class="btn btn-secondary">
+                        <a href="#navEdit" onclick="editProduct(event, '${_id}')" class="btn btn-secondary">
                         <i class="bi bi-pencil-square"></i>
                         </a>
                         <a href="" onclick="deleteProduct(event, '${_id}')" class="btn btn-danger">
@@ -186,5 +183,5 @@ function insertProduct() {
                 </div>
             </div>
         `
-        })
-    }
+    })
+}
