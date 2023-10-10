@@ -8,6 +8,8 @@ const imgP = document.querySelector('#imageP')
 const brandP = document.querySelector('#brandP')
 const priceP = document.querySelector('#priceP')
 const formAdmin = document.querySelector('#formAdmin')
+const buttAddEdit = document.querySelector('#buttAddEdit')
+
 let addORedit = "add"
 
 const API = "https://striveschool-api.herokuapp.com/api/product/"
@@ -125,26 +127,33 @@ function editProduct(e, idpro) {
     e.preventDefault()
 
     alert('Stai modificando il prodotto con id ' + idpro)
-    addORedit = "edit"
-    // rowCont.innerHTML = ""
-    // addProduct()
-    fetch(API + idpro, {
-        headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
-        }
-    }).then(r => r.json())
-        .then(selectedProduct)
+    if (confirm("Sei sicuro di voler modificare il prodotto selezionato?")) {
 
-    function selectedProduct(p) {
-        console.log(p)
-        const { _id, name, description, imageUrl, brand, price } = p
-        nameP.name = _id
-        nameP.value = name
-        descrP.value = description
-        imgP.value = imageUrl
-        brandP.value = brand
-        priceP.value = price
-        console.log(nameP.name)
+        addORedit = "edit"
+        buttAddEdit.innerHTML = "Edit Product"
+        // rowCont.innerHTML = ""
+        // addProduct()
+        fetch(API + idpro, {
+            headers: {
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+            }
+        }).then(r => r.json())
+            .then(selectedProduct)
+
+        function selectedProduct(p) {
+            console.log(p)
+            const { _id, name, description, imageUrl, brand, price } = p
+            nameP.name = _id
+            nameP.value = name
+            descrP.value = description
+            imgP.value = imageUrl
+            brandP.value = brand
+            priceP.value = price
+            console.log(nameP.name)
+        }
+    }
+    else{
+        alert("Nessuna modifica apportata")
     }
 }
 
