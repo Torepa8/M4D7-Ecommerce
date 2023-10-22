@@ -11,7 +11,7 @@ const rigaCard = document.querySelector('#rigaCard')
 async function loadProduct() {
     const risp = await fetch(api, {
         headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTYyNzUzMjUsImV4cCI6MTY5NzQ4NDkyNX0.vww_zKkpOGlO7u-I13sFxDxHeNkvp-lo54e_5w5ag84"
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTc5MzQ2NzUsImV4cCI6MTY5OTE0NDI3NX0.fX9QwwR6dJ38iOaDgeB5B1IHixO7O3_EmAxpypOKWrE"
         }
     })
     const prodotti = await risp.json()
@@ -68,7 +68,7 @@ async function insertProduct(dataInsert) {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTY0MTU2NjksImV4cCI6MTY5NzYyNTI2OX0.wcciYsvcV8Y8cHbI5OP8nm04BU44GDgf3uWkiU2RpTU"
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTc5MzQ2NzUsImV4cCI6MTY5OTE0NDI3NX0.fX9QwwR6dJ38iOaDgeB5B1IHixO7O3_EmAxpypOKWrE"
         },
         body: JSON.stringify(dataInsert)
     })
