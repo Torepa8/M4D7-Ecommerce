@@ -52,7 +52,7 @@ async function uploadProduct(inputData) {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTY0MTU2NjksImV4cCI6MTY5NzYyNTI2OX0.wcciYsvcV8Y8cHbI5OP8nm04BU44GDgf3uWkiU2RpTU"
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTM3ZjlkMzc3Y2RhYTAwMTQ2ZGYzODIiLCJpYXQiOjE2OTgxNjcyNTIsImV4cCI6MTY5OTM3Njg1Mn0.F1WGzQ8_kui5LLDefDSgxqBx32KYZ1bXeRTRTc4mE-w"
         },
         body: JSON.stringify(inputData)
     }).finally(alert("Prodotto Inserito"))
@@ -66,7 +66,7 @@ async function addEditProduct(inputData) {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTc5MzQ2NzUsImV4cCI6MTY5OTE0NDI3NX0.fX9QwwR6dJ38iOaDgeB5B1IHixO7O3_EmAxpypOKWrE"
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTM3ZjlkMzc3Y2RhYTAwMTQ2ZGYzODIiLCJpYXQiOjE2OTgxNjcyNTIsImV4cCI6MTY5OTM3Njg1Mn0.F1WGzQ8_kui5LLDefDSgxqBx32KYZ1bXeRTRTc4mE-w"
         },
         body: JSON.stringify(inputData)
     }).finally(alert("Prodotto Modificato"))
@@ -98,7 +98,7 @@ function insertProduct() {
 async function loadProduct() {
     const risp = await fetch(API, {
         headers: {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTc5MzQ2NzUsImV4cCI6MTY5OTE0NDI3NX0.fX9QwwR6dJ38iOaDgeB5B1IHixO7O3_EmAxpypOKWrE"
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTM3ZjlkMzc3Y2RhYTAwMTQ2ZGYzODIiLCJpYXQiOjE2OTgxNjcyNTIsImV4cCI6MTY5OTM3Njg1Mn0.F1WGzQ8_kui5LLDefDSgxqBx32KYZ1bXeRTRTc4mE-w"
         }
     })
     const prodotti = await risp.json()
@@ -114,7 +114,7 @@ async function deleteProduct(e, idpro) {
         fetch(API + idpro, {
             method: "DELETE",
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTc5MzQ2NzUsImV4cCI6MTY5OTE0NDI3NX0.fX9QwwR6dJ38iOaDgeB5B1IHixO7O3_EmAxpypOKWrE"
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTM3ZjlkMzc3Y2RhYTAwMTQ2ZGYzODIiLCJpYXQiOjE2OTgxNjcyNTIsImV4cCI6MTY5OTM3Njg1Mn0.F1WGzQ8_kui5LLDefDSgxqBx32KYZ1bXeRTRTc4mE-w"
             }
         })
         displayEditProduct()
@@ -135,7 +135,7 @@ function editProduct(e, idpro) {
         // addProduct()
         fetch(API + idpro, {
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTFiMWI3YzM5MzI3YzAwMThkM2EyYjYiLCJpYXQiOjE2OTc5MzQ2NzUsImV4cCI6MTY5OTE0NDI3NX0.fX9QwwR6dJ38iOaDgeB5B1IHixO7O3_EmAxpypOKWrE"
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTM3ZjlkMzc3Y2RhYTAwMTQ2ZGYzODIiLCJpYXQiOjE2OTgxNjcyNTIsImV4cCI6MTY5OTM3Njg1Mn0.F1WGzQ8_kui5LLDefDSgxqBx32KYZ1bXeRTRTc4mE-w"
             }
         }).then(r => r.json())
             .then(selectedProduct)
